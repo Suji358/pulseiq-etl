@@ -20,6 +20,12 @@ Extract -> Transform -> Validate -> Load for HR data (employees, salary, attenda
   We cannot know which date is wrong, so HR must correct the source.
 - Leaving date after the reference date (AS_OF_DATE) is rejected as `future_leaving_date`.
 
+## Validation demo
+
+docker compose run --rm -v "$PWD/demo_fail.py:/app/demo_fail.py" -v "$PWD/clean:/app/clean" etl python demo_fail.py
+
+This injects a negative salary into the clean data and shows the pandera validation failing loudly.
+
 ## Without Docker (Windows)
 ```
 py -m pip install -r requirements.txt
