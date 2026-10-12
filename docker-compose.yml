@@ -1,0 +1,11 @@
+services:
+  etl:
+    build: .
+    environment:
+      AS_OF_DATE: ${AS_OF_DATE:-2026-09-30}
+      OUTPUT_FORMAT: ${OUTPUT_FORMAT:-csv}
+    volumes:
+      - ./raw:/app/raw
+      - ./clean:/app/clean
+      - ./rejected:/app/rejected
+      - ./logs:/app/logs

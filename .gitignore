@@ -1,0 +1,10 @@
+.env
+__pycache__/
+raw/*
+clean/*
+rejected/*
+logs/*
+!raw/.gitkeep
+!clean/.gitkeep
+!rejected/.gitkeep
+!logs/.gitkeep
