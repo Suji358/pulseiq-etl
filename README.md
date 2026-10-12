@@ -18,6 +18,7 @@ Extract -> Transform -> Validate -> Load for HR data (employees, salary, attenda
 - Output is overwritten each run. Same input gives the same output (compare `output_checksums` in the run log).
 - Joining date after leaving date: row is rejected and flagged, not dropped silently and not auto-fixed.
   We cannot know which date is wrong, so HR must correct the source.
+- Leaving date after the reference date (AS_OF_DATE) is rejected as `future_leaving_date`.
 
 ## Without Docker (Windows)
 ```
