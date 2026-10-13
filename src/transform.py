@@ -115,14 +115,18 @@ def transform_attendance(raw: pd.DataFrame, valid_ids: set):
     df["employee_id"] = _text(df["employee_id"]).str.upper()
     df["date"] = _date(df["date"])
     df["status"] = _text(df["status"]).str.title().replace({"": "Unknown", "Half-Day": "Half Day"})
-    df = df.drop_duplicates()
+    exact_dup = df.duplicated(keep="first")
+    rejected_exact = raw.loc[exact_dup].copy()
+    rejected_exact["reject_reason"] = "exact_duplicate_row"
+    df = df.loc[~exact_dup].copy()
     raw = raw.loc[df.index]
     clean, rejected = _split(df, raw, [
         ("unknown_employee", _known(df, valid_ids)),
         ("invalid_date", df["date"].isna()),
         ("invalid_status", ~df["status"].isin(["Present", "Absent", "Half Day", "Leave", "Holiday", "Unknown"])),
         ("duplicate_attendance_record", df.duplicated(["employee_id", "date"], keep="first")),
-    ])
+    ])    
+    rejected = pd.concat([rejected, rejected_exact], axis=0)
     clean = _month_year(clean, "date")
     return clean.sort_values(["employee_id", "date"]).reset_index(drop=True), rejected
 
